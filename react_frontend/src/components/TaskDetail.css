@@ -1,0 +1,374 @@
+.task-detail-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.task-header {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.task-title {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+/* .domain-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: white;
+  background-color: #dc3545;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+} */
+
+.task-description {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.categories-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.category-tag {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+/* Data Processing tags */
+.category-tag[data-category="Feature Engineering"],
+.category-tag[data-category="Feature Selection"],
+.category-tag[data-category="Data Selection"] {
+  background: #e9ecef;
+  color: #495057;
+}
+
+/* Model Development tags */
+.category-tag[data-category="Deep Learning"],
+.category-tag[data-category="Machine Learning"] {
+  background: #ff69b4;
+  color: #fff;
+}
+
+/* Data Analysis tags */
+.category-tag[data-category="Statistical Analysis"],
+.category-tag[data-category="Geospatial Analysis"],
+.category-tag[data-category="Computational Analysis"] {
+  background: #add8e6;
+  color: #495057;
+}
+
+/* Info Visualization tags */
+.category-tag[data-category="Data Visualization"],
+.category-tag[data-category="Map Visualization"],
+.category-tag[data-category="Molecule Visualization"] {
+  background: #90ee90;
+  color: #495057;
+}
+
+.content-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.main-info,
+.code-data-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: visible;
+}
+
+.section h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content-preview {
+  color: #666;
+  width: 100%;
+  position: relative;
+}
+
+.expanded-content {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  width: 100%;
+  position: absolute;
+  background: white;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: 0 0 12px 12px;
+}
+
+.code-block {
+  background: #2d2d2d;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  border-radius: 6px;
+  font-family: 'Consolas', monospace;
+  overflow-x: auto;
+  max-height: 400px;
+}
+
+.file-tree {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 6px;
+  font-family: 'Consolas', monospace;
+  white-space: pre;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.evaluation-section {
+  margin-top: 2rem;
+}
+
+.evaluate-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  margin: 1rem 0;
+}
+
+.evaluate-button:hover {
+  background: #0056b3;
+}
+
+.evaluate-button:disabled {
+  background: #ccc;
+}
+
+/* Add scrollbar styling */
+.code-block::-webkit-scrollbar,
+.file-tree::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.code-block::-webkit-scrollbar-thumb,
+.file-tree::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .main-info,
+  .code-data-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.repo-link {
+  padding: 1rem 0;
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #0366d6;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  transition: all 0.2s ease;
+}
+
+.github-link:hover {
+  background: #f1f4f7;
+  border-color: #d1d5da;
+  text-decoration: none;
+}
+
+.github-icon {
+  font-size: 1.2rem;
+}
+
+.metrics-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.metrics-table th,
+.metrics-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.metrics-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+}
+
+.metrics-table tr:last-child td {
+  border-bottom: none;
+}
+
+.metrics-table tr:hover {
+  background: #f8f9fa;
+}
+
+.model-selection {
+  margin-bottom: 1rem;
+}
+
+.model-selection label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.model-dropdown {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #495057;
+  background-color: white;
+  margin-bottom: 1rem;
+}
+
+.model-dropdown:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.evaluate-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.code-comparison {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.code-panel {
+  flex: 1;
+}
+
+.code-panel h4 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.code-block {
+  background: #2d2d2d;
+  color: #d4d4d4;
+  padding: 1.5rem;
+  border-radius: 6px;
+  font-family: 'Consolas', monospace;
+  overflow-x: auto;
+  height: 500px;
+  overflow-y: auto;
+}
+
+.code-block pre {
+  margin: 0;
+}
+
+.code-block code {
+  font-family: 'Consolas', monospace;
+  white-space: pre-wrap;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .code-comparison {
+    grid-template-columns: 1fr;
+  }
+}
+
+.evaluation-section {
+  margin-bottom: 2rem;
+}
+
+.code-comparison-section {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .code-comparison {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  color: #495057;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background: #e9ecef;
+  border-color: #ced4da;
+  color: #212529;
+}
+
+.back-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
