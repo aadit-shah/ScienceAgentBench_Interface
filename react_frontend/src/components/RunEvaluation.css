@@ -1,0 +1,385 @@
+.evaluation-container {
+    display: flex;
+    min-height: calc(100vh - 60px);
+    background: var(--background);
+    color: var(--text-primary);
+    margin-top: 60px;
+    position: relative;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background: var(--surface);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: calc(100vh - 60px);
+    top: 60px;
+    overflow-y: auto;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar-header {
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--surface);
+  }
+  
+  .sidebar-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .sidebar-items {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .sidebar-item {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  
+  .sidebar-item:hover {
+    background: var(--hover-color);
+    transform: translateY(-2px);
+  }
+  
+  .sidebar-item.active {
+    background: var(--accent-primary);
+    color: white;
+  }
+  
+  .main-content {
+    flex: 1;
+    margin-left: 250px;
+    padding: 2rem;
+    overflow-y: auto;
+    height: calc(100vh - 60px);
+  }
+  
+  .panel-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .panel-content h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+  }
+  
+  .evaluation-form {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--background);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(var(--accent-primary-rgb), 0.3);
+    outline: none;
+  }
+  
+  .tasks-selection {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .tasks-selection h3 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+  
+  .task-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .search-input,
+  .domain-select {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--background);
+    color: var(--text-primary);
+  }
+  
+  .tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    height: 300px;
+    overflow-y: auto;
+    padding: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+  }
+  
+  .evaluation-task-card {
+    padding: 1rem;
+    background: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 120px;
+    min-height: 120px;
+    max-height: 120px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .evaluation-task-card.selected {
+    border-color: var(--accent-primary);
+    background: var(--hover-color);
+  }
+  
+  .evaluation-task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task-domain {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+  
+  .task-domain[data-domain="Computational Chemistry"] {
+    background: #ff7f50;
+  }
+  
+  .task-domain[data-domain="Bioinformatics"] {
+    background: #3cb371;
+  }
+  
+  .task-domain[data-domain="Geographical Information Science"] {
+    background: #4682b4;
+  }
+  
+  .task-domain[data-domain="Psychology and Cognitive science"] {
+    background: #9370db;
+  }
+  
+  .task-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--text-secondary);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+  
+  .form-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .submit-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    background: var(--accent-primary);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  
+  .submit-button:hover {
+    background: var(--accent-secondary);
+    transform: translateY(-2px);
+  }
+  
+  .evaluation-details {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+  }
+  
+  .evaluation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .evaluation-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  
+  .evaluation-status {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+  
+  .evaluation-status.pending {
+    background: #ffc107;
+    color: white;
+  }
+  
+  .info-group {
+    margin-bottom: 1rem;
+  }
+  
+  .info-group label {
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  
+  .selected-tasks-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .selected-tasks-list li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .evaluation-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .selected-tasks-panel {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+    max-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .selected-tasks-header {
+    padding: 1.5rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .selected-tasks-content {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+  }
+  
+  .selected-task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem;
+    background: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+  }
+  
+  .selected-task-info {
+    flex: 1;
+    margin-right: 1rem;
+  }
+  
+  .remove-task-btn {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .remove-task-btn:hover {
+    background-color: rgba(255, 77, 77, 0.1);
+  }
+  
+  .no-tasks-selected {
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 1rem;
+    font-style: italic;
+  }
+  

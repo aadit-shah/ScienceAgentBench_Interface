@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchTasks } from '../api/api';
 import TaskCard from './TaskCard';
-import './TaskList.css';
+import './TaskGallery.css';
+import { Link } from 'react-router-dom';
 
-const TaskList = () => {
+const TaskGallery = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedDomains, setSelectedDomains] = useState(new Set());
   const [availableDomains, setAvailableDomains] = useState([]);
-  const [groupByDomain, setGroupByDomain] = useState(false); // New state for grouping
-  
+  const [groupByDomain, setGroupByDomain] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchTasks()
       .then((response) => {
         setTasks(response.data);
-        // Extract unique domains from tasks
         const domains = [...new Set(response.data.map(task => task.domain))];
         setAvailableDomains(domains);
         setLoading(false);
@@ -42,14 +42,15 @@ const TaskList = () => {
   };
 
   const handleGroupByDomain = () => {
-    setGroupByDomain(prev => !prev); // Toggle grouping
+    setGroupByDomain(prev => !prev);
   };
 
-  const filteredTasks = tasks.filter(task => 
-    selectedDomains.size === 0 || selectedDomains.has(task.domain)
-  );
+  const filteredTasks = tasks.filter(task => {
+    const matchesDomain = selectedDomains.size === 0 || selectedDomains.has(task.domain)
+    const matchesSearch = (searchQuery === '') || (task.task_inst.toLowerCase().includes(searchQuery.toLowerCase()))
+    return matchesDomain && matchesSearch
+  });
 
-  // Sort tasks by domain if grouping is enabled
   const sortedTasks = groupByDomain
     ? filteredTasks.sort((a, b) => a.domain.localeCompare(b.domain))
     : filteredTasks;
@@ -77,33 +78,47 @@ const TaskList = () => {
             <span className="count-number">{sortedTasks.length}</span>
             <span className="count-label">Tasks Available</span>
           </p>
+          <Link to="/tasks/new" className="add-task-button">
+            + Add New Task
+          </Link>
         </div>
         <div className="header-divider"></div>
       </header>
-      
-      <div className="filter-container">
-        {availableDomains.map(domain => (
+
+      <div className="search-and-filter-container">
+             
+        <div className="filter-container">
+          {availableDomains.map(domain => (
+            <motion.button
+              key={domain}
+              className={`filter-button ${selectedDomains.has(domain) ? 'active' : ''}`}
+              onClick={() => toggleDomain(domain)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              {domain}
+            </motion.button>
+          ))}
           <motion.button
-            key={domain}
-            className={`filter-button ${selectedDomains.has(domain) ? 'active' : ''}`}
-            onClick={() => toggleDomain(domain)}
+            className="filter-button"
+            onClick={handleGroupByDomain}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2 }}
           >
-            {domain}
+            {groupByDomain ? 'Ungroup' : 'Group By Domain'}
           </motion.button>
-        ))}
-        <motion.button
-          className="filter-button"
-          onClick={handleGroupByDomain}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ duration: 0.2 }}
-        >
-          {groupByDomain ? 'Ungroup' : 'Group By Domain'}
-        </motion.button>
+        </div>
+        <input
+          type="text"
+          placeholder="Search tasks"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-input"
+        /> 
       </div>
+
 
       <motion.div 
         className="task-grid"
@@ -132,4 +147,4 @@ const TaskList = () => {
   );
 };
 
-export default TaskList;
+export default TaskGallery;

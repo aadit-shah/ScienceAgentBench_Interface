@@ -1,7 +1,11 @@
 import React from 'react';
-import TaskList from './components/TaskList';
+import TaskList from './components/TaskGallery';
 import TaskDetail from './components/TaskDetail';
 import { Route, Routes, Link } from 'react-router-dom';
+import TaskGallery from './components/TaskGallery';
+import Home from './components/Home';
+import AddTask from './components/AddTask';
+import RunEvaluation from './components/RunEvaluation';
 import './App.css';
 
 function App() {
@@ -14,6 +18,9 @@ function App() {
           </Link>
           <div className="navbar-links">
             <Link to="/" className="nav-link">Home</Link>
+            <Link to="/gallery" className="nav-link">Gallery</Link>
+            <Link to="/add-task" className="nav-link">Add Task</Link>
+            <Link to="/run-evaluation" className="nav-link">Run Evaluation</Link>
             {/* Add more navigation links as needed */}
           </div>
         </div>
@@ -21,14 +28,13 @@ function App() {
 
       <main className="app-main">
         <Routes>
-          <Route path="/" element={<TaskList />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/gallery" element={<TaskGallery />} />
           <Route path="/tasks/:instanceId" element={<TaskDetail />} />
+          <Route path="/add-task" element={<AddTask />} />
+          <Route path="/run-evaluation" element={<RunEvaluation />} />
         </Routes>
       </main>
-
-      <footer className="app-footer">
-        <p>© 2024 ScienceAgentBench</p>
-      </footer>
     </div>
   );
 }

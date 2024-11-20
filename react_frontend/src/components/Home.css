@@ -1,0 +1,441 @@
+/* Import fonts at the top of the file */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
+
+/* Color Variables */
+:root {
+    --background: #0f1117;
+    --sidebar: #161921;
+    --surface: #1e2028;
+    --text-primary: #e6e9ef;
+    --text-secondary: #9ba1b0;
+    --accent-primary: #4f46e5;
+    --accent-secondary: #818cf8;
+    --hover-color: rgba(79, 70, 229, 0.1);
+    --border-color: rgba(55, 65, 81, 0.5);
+    --focus-ring: rgba(79, 70, 229, 0.4);
+  }
+  
+  .app-container {
+    display: flex;
+    height: 100vh;
+    background-color: var(--background);
+    color: var(--text-primary);
+  }
+  
+  /* Sidebar Styles */
+  .sidebar-container {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    overflow: visible;
+  }
+  
+  .sidebar {
+    position: fixed;
+    width: 260px;
+    height: calc(100vh - 60px);
+    top: 60px;
+    background-color: var(--sidebar);
+    border-right: 1px solid var(--border-color);
+    padding: 1.5rem 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1001;
+  }
+  
+  .sidebar-header {
+    padding: 0 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    padding: 1rem;
+    animation: fadeIn 0.6s ease-out 0.3s both;
+  }
+  
+  .new-chat {
+    width: 100%;
+    padding: 0.875rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .new-chat:hover {
+    background-color: var(--hover-color);
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+  }
+  
+  nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+  }
+  
+  nav a:hover {
+    background-color: var(--hover-color);
+    color: var(--accent-blue);
+  }
+  
+  /* Main Content Layout */
+  .main-content {
+    position: fixed;
+    height: calc(100vh - 60px);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden !important;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    top: 60px;
+  }
+  
+  .messages-container {
+    flex: 1;
+    display: flex;
+    position: relative;
+    overflow: hidden !important;
+  }
+  
+  .chat-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow: hidden !important;
+  }
+  
+  /* Chat Footer */
+  .chat-footer {
+    background-color: var(--sidebar);
+    border-top: 1px solid var(--border-color);
+    padding: 1rem;
+    width: 100%;
+  }
+  
+  .chat-form {
+    display: flex;
+    gap: 1rem;
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+  
+  .chat-form input {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.9375rem;
+    letter-spacing: -0.01em;
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background-color: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+  }
+  
+  .chat-form input:focus {
+    border-color: var(--text-primary);
+    box-shadow: 0 0 0 2px var(--hover-color);
+    outline: none;
+  }
+  
+  .chat-controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .chat-controls button {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+    padding: 0.75rem 1.25rem;
+    background-color: var(--accent);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .chat-controls button:hover {
+    transform: translateY(-1px);
+    background-color: var(--sidebar);
+    border-color: var(--text-primary);
+  }
+  
+  /* Message Styles */
+  .message {
+    margin: 1rem 0;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--accent);
+    border: 1px solid var(--border-color);
+  }
+  
+  .message.user {
+    background-color: var(--sidebar);
+  }
+  
+  .message-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .message-content .avatar {
+    font-size: 1.5rem;
+  }
+  
+  .message-content p {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  
+  /* Welcome Screen */
+  .welcome-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    text-align: center;
+    overflow: hidden !important;
+  }
+  
+  .welcome-screen h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 4rem;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin-bottom: 3rem;
+    background: linear-gradient(120deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 10px rgba(79, 70, 229, 0.2);
+  }
+  
+  .welcome-screen p {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    color: var(--text-secondary);
+  }
+  
+  .typing-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+  }
+  
+  .typing-text {
+    display: inline-block;
+    overflow: hidden;
+    white-space: pre-wrap;
+    font-size: 1.75rem;
+    color: var(--text-secondary);
+    border-right: 2px solid var(--accent-primary);
+    animation: blink-caret 0.75s step-end infinite;
+  }
+  
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: var(--accent-primary) }
+  }
+  
+  .welcome-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  
+  .start-button, .example-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+  }
+  
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--primary-dark);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent-dark);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-blue);
+  }
+  
+  /* Update sidebar tasks styling */
+  .sidebar-tasks {
+    padding: 0 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .sidebar-task-card {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 180px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .sidebar-task-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .task-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.85em;
+    color: var(--text-primary);
+    font-weight: 500;
+    max-width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 1;
+  }
+  
+  .sidebar-task-card .task-content {
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    overflow-y: auto;
+    max-height: 120px;
+    padding: 10px;
+  }
+  
+  .sidebar-task-card .task-content p {
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    display: box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-align: left;
+    overflow: hidden;
+  }
+  
+  /* Domain-specific badge colors */
+  .task-badge[data-domain="Computational Chemistry"] {
+    background: #ff7f50;
+  }
+  
+  .task-badge[data-domain="Bioinformatics"] {
+    background: #3cb371;
+  }
+  
+  .task-badge[data-domain="Geographical Information Science"] {
+    background: #4682b4;
+  }
+  
+  .task-badge[data-domain="Psychology and Cognitive science"] {
+    background: #9370db;
+  }
+  
+  /* Add styles for the toggle button */
+  .sidebar-toggle {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 48px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sidebar);
+    border: 1px solid var(--border-color);
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+    color: var(--text-secondary);
+    z-index: 1002;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+  
+  .sidebar-toggle:hover {
+    background-color: var(--surface);
+    color: var(--text-primary);
+  }
+  
+  /* Remove the transform rotation animation and use content instead */
+  .sidebar-toggle::after {
+    content: "→";
+  }
+  
+  .sidebar-toggle[data-open="true"]::after {
+    content: "←";
+  }
+  
+  .sidebar-tasks a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  
+  .home-container {
+    height: calc(100vh - 60px);
+    margin-top: 60px;
+    position: fixed;
+    width: 100%;
+    background-color: var(--background);
+    overflow: hidden !important;
+  }
+  
+  /* Add this to prevent body scrolling when on home page */
+  body.home-page {
+    overflow: hidden !important;
+  }

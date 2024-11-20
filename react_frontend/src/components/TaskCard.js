@@ -12,7 +12,7 @@ const TaskCard = ({ task, onCategoryClick }) => {
       <Link to={`/tasks/${task.instance_id}`} className="task-card">
         <div className="domain-badge" data-domain={task.domain}>{task.domain}</div>
         <div className="task-content">
-          <p>{task.task_inst}</p>
+          <p>{task.task_inst.split('. ')[0]} </p>
         </div>
         <div className="tag-container">
           {categories.map((category, index) => (
