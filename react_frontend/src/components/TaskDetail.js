@@ -11,185 +11,165 @@ import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
 import './TaskDetail.css';
 
-const TaskDetail = () => {
+const TaskDetail = ({ task: propTask, isEditable, availableModels, availableFrameworks, onUpdate }) => {
   const { instanceId } = useParams();
-  const [task, setTask] = useState(null);
+  const [task, setTask] = useState(propTask || null);
   const [evaluation, setEvaluation] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!propTask);
   const [error, setError] = useState(null);
   const [evaluating, setEvaluating] = useState(false);
   const [selectedModel, setSelectedModel] = useState('');
-  const [goldProgram, setGoldProgram] = useState(null);
+  const [goldProgram, setGoldProgram] = useState(propTask?.gold_program || null);
   const [predictedCode, setPredictedCode] = useState(null);
   const [selectedFramework, setSelectedFramework] = useState('');
   const [activeProgram, setActiveProgram] = useState('gold');
   const navigate = useNavigate();
 
-  const availableModels = [
+  // Add null checks and default values for arrays
+  const models = availableModels || [
     'Llama-3.1-Instruct-70B',
     'Llama-3.1-Instruct-405B',
     'Mistral-Large-2 (2407)',
     'GPT-4o (2024-05-13)',
     'Claude-3.5-Sonnet (2024-06-20)',
-    'OpenAI o1'
+    'OpenAI o1',
   ];
 
-  const availableFrameworks = [
+  const frameworks = availableFrameworks || [
     'Self Debug',
     'OpenHands CodeAct',
     'Use Knowledge'
   ];
 
-  useEffect(() => {
-    fetchTask(instanceId)
-      .then((response) => {
-        if (response.data.error) {
-          setError(new Error(response.data.error));
-          setLoading(false);
-          return;
-        }
-        setTask(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
-      });
-  }, [instanceId]);
-
-  useEffect(() => {
-    if (task?.gold_program_name) {
-      fetch(`/api/gold-program/${task.gold_program_name}`)
-        .then(response => response.text())
-        .then(code => setGoldProgram(code))
-        .catch(error => console.error('Error fetching gold program:', error));
-    }
-  }, [task]);
-
   const handleEvaluate = async () => {
     if (!selectedModel || !selectedFramework) {
-      alert('Please select a model and framework first');
+      alert('Please select both a model and a framework');
       return;
     }
 
+    setEvaluating(true);
     try {
-      setEvaluating(true);
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setEvaluation({
-        sr: "15.2",
-        cbs: "82.5",
-        ver: "36.0",
-        cost: "0.017"
+      const evaluationData = {
+        task_id: task.instance_id,
+        model: selectedModel,
+        framework: selectedFramework
+      };
+
+      // Replace with your actual API call
+      const response = await fetch('/api/evaluate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(evaluationData),
       });
-      setPredictedCode(`import numpy as np
-import matplotlib.pyplot as plt
 
-def analyze_flooding():
-    elevation_data = np.random.rand(100, 100)
-    flood_risk = elevation_data < 0.5
-    
-    plt.figure(figsize=(10, 10))
-    plt.imshow(flood_risk)
-    plt.colorbar(label='Flood Risk')
-    plt.title('Predicted Flood Risk Analysis')
-    plt.savefig('pred_results/flooding_analysis.png')
+      const result = await response.json();
+      
+      if (result.error) {
+        throw new Error(result.error);
+      }
 
-if __name__ == "__main__":
-    analyze_flooding()`);
+      setEvaluation(result);
+      setPredictedCode(result.predicted_code);
+      setActiveProgram('predicted');
     } catch (error) {
-      console.error("Error during evaluation:", error);
+      console.error('Evaluation failed:', error);
+      alert('Failed to evaluate: ' + error.message);
     } finally {
       setEvaluating(false);
     }
   };
 
   useEffect(() => {
-    if (goldProgram || predictedCode) {
-      Prism.highlightAll();
+    // Update task when propTask changes
+    if (propTask) {
+      setTask(propTask);
+      setGoldProgram(propTask.gold_program);
+      setLoading(false);
+      return;
     }
-  }, [goldProgram, predictedCode, activeProgram]);
 
-  if (loading) return <div className="loading-state">Loading task details...</div>;
-  if (error) return <div className="error-state">Error loading task details: {error.message}</div>;
-  if (!task) return <div className="error-state">Task not found.</div>;
+    // Only fetch if we have an instanceId and no propTask
+    if (instanceId) {
+      setLoading(true);
+      fetchTask(instanceId)
+        .then((response) => {
+          if (response.data.error) {
+            setError(new Error(response.data.error));
+            return;
+          }
+          setTask(response.data);
+          setGoldProgram(response.data.gold_program);
+        })
+        .catch((error) => {
+          setError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [instanceId, propTask]);
+
+  if (loading) {
+    return <div className="loading-container">Loading task details...</div>;
+  }
+
+  if (error) {
+    return <div className="error-container">Error: {error.message}</div>;
+  }
+
+  if (!task) {
+    return <div className="error-container">No task found</div>;
+  }
 
   return (
     <div className="task-detail-container">
-      <div className="content-wrapper">
-        <button onClick={() => navigate(-1)} className="back-button">
-          ← Back to Tasks
-        </button>
-
-        <motion.div 
-          className="task-header"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="header-content">
-            <h2 className="task-title">Task</h2>
-            <div className="task-description">{task.task_inst}</div>
-            <div className="metadata">
-              <div className="categories-container">
-                {task.subtask_categories?.split(',').map((category, index) => (
-                  <span 
-                    key={index} 
-                    className="category-tag" 
-                    data-category={category.trim()}
-                  >
-                    {category.trim()}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="domain-badge" data-domain={task.domain}>
-            {task.domain}
-          </div>
-        </motion.div>
-
-        <motion.div 
-          className="main-content-grid"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
-          <InfoBox title="Domain Knowledge" content={task.domain_knowledge} />
-          <InfoBox title="Dataset Preview" content={task.dataset_preview} isCode />
-          <RepoDatasetInfo task={task} />
-        </motion.div>
-
-        <CodeComparison 
-          goldProgram={goldProgram} 
-          predictedCode={predictedCode} 
-          activeProgram={activeProgram} 
-          setActiveProgram={setActiveProgram} 
-        />
-
-        <EvaluationSection 
-          availableModels={availableModels} 
-          availableFrameworks={availableFrameworks} 
-          selectedModel={selectedModel} 
-          setSelectedModel={setSelectedModel} 
-          selectedFramework={selectedFramework} 
-          setSelectedFramework={setSelectedFramework} 
-          handleEvaluate={handleEvaluate} 
-          evaluating={evaluating} 
-          evaluation={evaluation} 
-        />
+      <div className="task-header">
+        <h2>{task.task_name || task.task_inst.split('. ')[0]}</h2>
+        {isEditable && onUpdate && (
+          <button className="edit-button" onClick={() => {/* Add edit handler */}}>
+            Edit Task
+          </button>
+        )}
       </div>
+
+      <motion.div 
+        className="main-content-grid"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+      >
+        <InfoBox title="Domain Knowledge" content={task.domain_knowledge || 'No domain knowledge provided'} />
+        <InfoBox title="Dataset Preview" content={task.dataset_preview || 'No dataset preview available'} isCode />
+        {task.repo_data && task.dataset_info && <RepoDatasetInfo task={task} />}
+      </motion.div>
+
+      <CodeComparison 
+        goldProgram={goldProgram} 
+        predictedCode={predictedCode} 
+        activeProgram={activeProgram} 
+        setActiveProgram={setActiveProgram} 
+      />
+
     </div>
   );
 };
 
-const InfoBox = ({ title, content, isCode }) => (
-  <section className="info-box">
-    <h3>{title}</h3>
-    <div className={`content ${isCode ? 'code-block' : ''}`}>
-      {isCode ? <pre><code>{content}</code></pre> : <p>{content}</p>}
+// Make sure these components handle null/undefined props gracefully
+const InfoBox = ({ title, content, isCode }) => {
+  if (!content) return null;
+  return (
+    <div className="info-box">
+      <h3>{title}</h3>
+      {isCode ? (
+        <pre className="code-block"><code>{content}</code></pre>
+      ) : (
+        <p>{content}</p>
+      )}
     </div>
-  </section>
-);
+  );
+};
 
 const RepoDatasetInfo = ({ task }) => (
   <section className="info-box repo-dataset">
@@ -246,83 +226,6 @@ const CodeComparison = ({ goldProgram, predictedCode, activeProgram, setActivePr
   </section>
 );
 
-const EvaluationSection = ({
-  availableModels, availableFrameworks, selectedModel, setSelectedModel,
-  selectedFramework, setSelectedFramework, handleEvaluate, evaluating, evaluation
-}) => (
-  <section className="evaluation-section">
-    <h3>Evaluation</h3>
-    <div className="evaluation-content">
-      <div className="model-selection">
-        <label htmlFor="model-select">Select Language Model:</label>
-        <select
-          id="model-select"
-          value={selectedModel}
-          onChange={(e) => setSelectedModel(e.target.value)}
-          className="model-dropdown"
-        >
-          <option value="">Select a model...</option>
-          {availableModels.map((model) => (
-            <option key={model} value={model}>
-              {model}
-            </option>
-          ))}
-        </select>
 
-        <label htmlFor="framework-select">Select Framework:</label>
-        <select
-          id="framework-select"
-          value={selectedFramework}
-          onChange={(e) => setSelectedFramework(e.target.value)}
-          className="model-dropdown"
-        >
-          <option value="">Select a framework...</option>
-          {availableFrameworks.map((framework) => (
-            <option key={framework} value={framework}>
-              {framework}
-            </option>
-          ))}
-        </select>
-      </div>
-      <button 
-        onClick={handleEvaluate} 
-        disabled={evaluating || !selectedModel}
-        className="evaluate-button"
-      >
-        {evaluating ? 'Evaluating...' : 'Run Evaluation'}
-      </button>
-      {evaluation && (
-        <div className="evaluation-results">
-          <table className="metrics-table">
-            <thead>
-              <tr>
-                <th>Metric</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Success Rate (SR)</td>
-                <td>{evaluation.sr}%</td>
-              </tr>
-              <tr>
-                <td>Code Block Success (CBS)</td>
-                <td>{evaluation.cbs}%</td>
-              </tr>
-              <tr>
-                <td>Verification Rate (VER)</td>
-                <td>{evaluation.ver}%</td>
-              </tr>
-              <tr>
-                <td>Cost</td>
-                <td>${evaluation.cost}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  </section>
-);
 
 export default TaskDetail;

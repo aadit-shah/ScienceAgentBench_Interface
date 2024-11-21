@@ -1,0 +1,475 @@
+.task-manager-container {
+    display: flex;
+    min-height: calc(100vh - 60px);
+    background: var(--background);
+    color: var(--text-primary);
+    margin-top: 60px;
+    position: relative;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background: var(--surface);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: calc(100vh - 60px);
+    top: 60px;
+    overflow-y: auto;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar-header {
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--surface);
+  }
+  
+  .sidebar-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .sidebar-items {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow-y: auto;
+  }
+  
+  .new-task-button {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: transparent;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 0.5rem;
+  }
+  
+  .new-task-button:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    background: var(--hover-color);
+  }
+  
+  .sidebar-card {
+    background: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 80px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .sidebar-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar-card.active {
+    border-color: var(--accent-primary);
+    background: var(--hover-color);
+  }
+  
+  .sidebar-card.editable {
+    border-left: 3px solid var(--accent-primary);
+  }
+  
+  .sidebar-card .task-domain {
+    display: inline-block;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
+    border-radius: 10px;
+    color: white;
+    margin-bottom: 0.5rem;
+    max-width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .sidebar-card .task-description {
+    font-size: 0.9rem;
+    line-height: 1.3;
+    color: var(--text-primary);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin: 0;
+  }
+  
+  .main-content {
+    flex: 1;
+    margin-left: 250px;
+    padding: 2rem;
+    overflow-y: auto;
+    height: calc(100vh - 60px);
+  }
+  
+  .panel-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .panel-content h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+  }
+  
+  .task-form {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--background);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .form-group textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 0.875rem;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--background);
+    color: var(--text-primary);
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(var(--accent-primary-rgb), 0.2);
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+  }
+  
+  .submit-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    background: var(--accent-primary);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    min-width: 150px;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  
+  .submit-button:hover {
+    background: var(--accent-secondary);
+    transform: translateY(-2px);
+  }
+  
+  .submit-button:disabled {
+    background: var(--text-secondary);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .task-detail {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .task-detail-content {
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  .info-section {
+    background: var(--background);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+  }
+  
+  .info-section h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+  }
+  
+  .code-section {
+    background: var(--surface-dark);
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'Fira Code', monospace;
+    overflow-x: auto;
+  }
+  
+  .edit-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .edit-button:hover {
+    background: var(--hover-color);
+    transform: translateY(-1px);
+  }
+  
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
+  
+  .error-message {
+    color: var(--error);
+    background: var(--error-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 200px;
+    }
+  
+    .main-content {
+      margin-left: 200px;
+      padding: 1rem;
+    }
+  
+    .form-actions {
+      flex-direction: column;
+    }
+  
+    .submit-button {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .sidebar {
+      display: none;
+    }
+  
+    .main-content {
+      margin-left: 0;
+    }
+  }
+  
+  .task-detail-container {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Add any additional TaskDetail-specific styles needed for the TaskManager context */
+  
+  /* Add these new styles */
+  .task-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .task-form {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    
+  }
+  
+  .preview-panel {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+    max-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .preview-header {
+    padding: 1.5rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .preview-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .preview-content {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+  }
+  
+  .task-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .preview-section {
+    background: var(--background);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+  }
+  
+  .preview-section h5 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+  
+  .no-preview {
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 1rem;
+    font-style: italic;
+  }
+  
+  /* Update existing form styles to match RunEvaluation */
+  .form-group textarea {
+    min-height: 120px;
+    max-height: 300px;
+  }
+  
+  .form-actions {
+    margin-top: 2rem;
+  }
+  
+  .submit-button {
+    min-width: 150px;
+  }
+  
+  /* Domain-specific colors */
+  .task-domain[data-domain="Computational Chemistry"] {
+    background: #ff7f50;
+  }
+  
+  .task-domain[data-domain="Bioinformatics"] {
+    background: #3cb371;
+  }
+  
+  .task-domain[data-domain="Geographical Information Science"] {
+    background: #4682b4;
+  }
+  
+  .task-domain[data-domain="Psychology and Cognitive science"] {
+    background: #9370db;
+  }
+  
+  .task-domain[data-domain="Mathematics"] {
+    background: #ff9f43;
+  }
+  
+  .task-domain[data-domain="Physics"] {
+    background: #2ecc71;
+  }
+  
+  .task-domain[data-domain="Computer Graphics"] {
+    background: #e056fd;
+  }
+  
+  .task-domain[data-domain="Robotics"] {
+    background: #20bf6b;
+  }
+  
+  .task-domain[data-domain="Computer Architecture"] {
+    background: #778ca3;
+  }
+  
+  .task-domain[data-domain="Software Engineering"] {
+    background: #a5b1c2;
+  }
+  
+  .task-domain[data-domain="Quantum Computing"] {
+    background: #4b7bec;
+  }

@@ -71,78 +71,73 @@ const TaskGallery = () => {
 
   return (
     <div className="task-list-container">
-      <header className="task-list-header">
-        <div className="header-content">
-          <h2>Tasks</h2>
-          <p className="task-count">
-            <span className="count-number">{sortedTasks.length}</span>
-            <span className="count-label">Tasks Available</span>
-          </p>
-          <Link to="/tasks/new" className="add-task-button">
-            + Add New Task
-          </Link>
-        </div>
-        <div className="header-divider"></div>
-      </header>
+      <div className="fixed-header-section">
+        <header className="task-list-header">
+          <div className="header-content">
+            <h2>Tasks</h2>
+            <p className="task-count">
+              <span className="count-number">{sortedTasks.length}</span>
+              <span className="count-label">Tasks Available</span>
+            </p>
+            <Link to="/tasks/new" className="add-task-button">
+              + Add New Task
+            </Link>
+          </div>
+          <div className="header-divider"></div>
+        </header>
 
-      <div className="search-and-filter-container">
-             
-        <div className="filter-container">
-          {availableDomains.map(domain => (
-            <motion.button
-              key={domain}
-              className={`filter-button ${selectedDomains.has(domain) ? 'active' : ''}`}
-              onClick={() => toggleDomain(domain)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              {domain}
-            </motion.button>
-          ))}
-          <motion.button
-            className="filter-button"
-            onClick={handleGroupByDomain}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-          >
-            {groupByDomain ? 'Ungroup' : 'Group By Domain'}
-          </motion.button>
+        <div className="search-and-filter-container">
+          <input
+            type="text"
+            placeholder="Search tasks"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
         </div>
-        <input
-          type="text"
-          placeholder="Search tasks"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-input"
-        /> 
       </div>
 
+      <div className="main-content-wrapper">
+        <div className="scrollable-content">
+          <motion.div 
+            className="task-grid"
+            layout
+          >
+            <AnimatePresence mode="popLayout">
+              {sortedTasks.map((task) => (
+                <motion.div
+                  key={task.instance_id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{
+                    opacity: { duration: 0.3 },
+                    scale: { duration: 0.3 },
+                    layout: { duration: 0.3 }
+                  }}
+                >
+                  <TaskCard task={task} onCategoryClick={(category) => console.log('Category clicked:', category)} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        </div>
 
-      <motion.div 
-        className="task-grid"
-        layout
-      >
-        <AnimatePresence mode="popLayout">
-          {sortedTasks.map((task) => (
-            <motion.div
-              key={task.instance_id}
-              layout
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{
-                opacity: { duration: 0.3 },
-                scale: { duration: 0.3 },
-                layout: { duration: 0.3 }
-              }}
+        <div className="legend-container">
+          <div className="legend-title">Domains</div>
+          {availableDomains.map(domain => (
+            <div
+              key={domain}
+              className={`legend-item ${selectedDomains.has(domain) ? 'active' : ''}`}
+              data-domain={domain}
+              onClick={() => toggleDomain(domain)}
             >
-              <TaskCard task={task} onCategoryClick={(category) => console.log('Category clicked:', category)} />
-            </motion.div>
+              {domain}
+            </div>
           ))}
-        </AnimatePresence>
-      </motion.div>
+        </div>
+      </div>
     </div>
   );
 };

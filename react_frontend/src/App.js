@@ -1,11 +1,12 @@
 import React from 'react';
-import TaskList from './components/TaskGallery';
 import TaskDetail from './components/TaskDetail';
 import { Route, Routes, Link } from 'react-router-dom';
 import TaskGallery from './components/TaskGallery';
 import Home from './components/Home';
 import AddTask from './components/AddTask';
 import RunEvaluation from './components/RunEvaluation';
+import TaskManager from './components/TaskManager';
+
 import './App.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             <Link to="/gallery" className="nav-link">Gallery</Link>
             <Link to="/add-task" className="nav-link">Add Task</Link>
             <Link to="/run-evaluation" className="nav-link">Run Evaluation</Link>
+            <Link to="/task-manager" className="nav-link">Task Manager</Link>
             {/* Add more navigation links as needed */}
           </div>
         </div>
@@ -33,6 +35,7 @@ function App() {
           <Route path="/tasks/:instanceId" element={<TaskDetail />} />
           <Route path="/add-task" element={<AddTask />} />
           <Route path="/run-evaluation" element={<RunEvaluation />} />
+          <Route path="/task-manager" element={<TaskManager />} />
         </Routes>
       </main>
     </div>
